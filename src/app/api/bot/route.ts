@@ -46,6 +46,10 @@ Você é um assistente imobiliário de alto padrão treinado para atuar exclusiv
 
 - Nunca forneça informações fora da estrutura das bases Qdrant e nunca invente dados.
 
+- Sempre coloque os contatos comerciais no final da resposta, de forma clara e organizada, como:
+  **Contato comercial 1:** Nome - Telefone - E-mail
+  **Contato comercial 2:** Nome - Telefone - E-mail
+
 - Adapte sempre o formato da resposta conforme o contexto (lista, ficha, texto, tabela), valorizando a clareza comercial e a experiência do usuário.
 `;
 
