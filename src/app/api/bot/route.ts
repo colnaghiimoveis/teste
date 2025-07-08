@@ -47,8 +47,6 @@ Você é um assistente imobiliário de alto padrão treinado para atuar exclusiv
 - Nunca forneça informações fora da estrutura das bases Qdrant e nunca invente dados.
 
 - Adapte sempre o formato da resposta conforme o contexto (lista, ficha, texto, tabela), valorizando a clareza comercial e a experiência do usuário.
-
-
 `;
 
 function isAskForLinks(text: string) {
@@ -69,7 +67,7 @@ export async function POST(req: Request) {
     // Busca vetorial no Qdrant
     const searchResult = await qdrant.search(COLLECTION_NAME, {
       vector,
-      limit: 5,
+      limit: 15,
       with_payload: true,
     });
 
@@ -89,18 +87,30 @@ export async function POST(req: Request) {
 **Tabela de valores:** ${p["LINK TABELA"] || 'informação não fornecida pela construtora'}
 `;
         }
-        // Contexto completo para outros tipos de pergunta
+        // FICHA TÉCNICA COMPLETA:
         return `
 ### ${p.EMPREENDIMENTO || 'Empreendimento'} (${p.CONSTRUTORA || 'Construtora'})
+**Estoque:** ${p.ESTOQUE || '-'}
+**Endereço:** ${p.ENDEREÇO || 'informação não fornecida pela construtora'}
 **Bairro:** ${p.BAIRRO || '-'}
 **Situação:** ${p.SITUAÇÃO || '-'}
 **Metragem:** ${p.METRAGEM || '-'}
 **Dorms/Suítes:** ${p["DORMS/SUITES"] || '-'}
 **Vagas:** ${p.VAGAS || '-'}
-**Entrega:** ${p["PREV. ENTREGA"] || '-'}
-**Valor a partir de:** ${p["VALOR A PARTIR DE"] || '-'}
-**Diferenciais:** ${p["DIFERENCIAIS/FRASE CHAVE"] || '-'}
 **Infraestrutura:** ${p.INFRAESTRUTURA || '-'}
+**Diferenciais:** ${p["DIFERENCIAIS/FRASE CHAVE"] || '-'}
+**Previsão de entrega:** ${p["PREV. ENTREGA"] || '-'}
+**Valor a partir de:** ${p["VALOR A PARTIR DE"] || '-'}
+**Pontos fortes:** ${p["PONTOS FORTES INDICADOS PELO CONSTRUTOR"] || '-'}
+**Persona indicada:** ${p["PERSONA INDICADA PELO CONSTRUTOR"] || '-'}
+**Contato comercial 1:** ${p["CONTATO COMERCIAL 1"] || '-'}
+**Contato comercial 2:** ${p["CONTATO COMERCIAL 2"] || '-'}
+**Políticas comerciais:** ${p["POLÍTICAS COMERCIAIS"] || '-'}
+**Drive das Construtoras:** ${p["DRIVE DAS CONSTRUTORAS"] || '-'}
+**Vídeo institucional:** ${p["LINK DOS VIDEOS"] || '-'}
+**Cards digitais:** ${p["LINK DOS CARDS"] || '-'}
+**Tabelão:** ${p["LINK TABELÃO"] || '-'}
+**Tabela de valores:** ${p["LINK TABELA"] || '-'}
 `;
       })
       .join('\n---\n');
@@ -135,7 +145,7 @@ Resposta:
         },
       ],
       temperature: 1,
-      max_tokens: 800,
+      max_tokens: 900,
     });
 
     const resposta = chat.choices[0].message.content;
